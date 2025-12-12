@@ -68,7 +68,7 @@ pnpm wacli groups rename --jid 123456789@g.us --name "New name"
 
 This project is heavily inspired by (and learns from) the excellent `whatsapp-cli` by Vicente Reig:
 
-- `https://github.com/vicentereig/whatsapp-cli`
+- <https://github.com/vicentereig/whatsapp-cli>
 
 ## High-level UX
 
