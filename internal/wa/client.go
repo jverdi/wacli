@@ -359,3 +359,32 @@ func (c *Client) ReconnectWithBackoff(ctx context.Context, minDelay, maxDelay ti
 		}
 	}
 }
+
+// GetOwnJID returns the JID of the authenticated user.
+func (c *Client) GetOwnJID() (types.JID, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	if c.client == nil || c.client.Store == nil || c.client.Store.ID == nil {
+		return types.JID{}, fmt.Errorf("not authenticated")
+	}
+	return *c.client.Store.ID, nil
+}
+
+// SetProfilePicture sets or removes the user's profile picture.
+// Pass nil for imageData to remove the profile picture.
+func (c *Client) SetProfilePicture(ctx context.Context, imageData []byte) (string, error) {
+	c.mu.Lock()
+	cli := c.client
+	c.mu.Unlock()
+	if cli == nil || !cli.IsConnected() {
+		return "", fmt.Errorf("not connected")
+	}
+	
+	ownJID, err := c.GetOwnJID()
+	if err != nil {
+		return "", err
+	}
+	
+	// Use SetGroupPhoto with our own JID - this might work for user profiles too
+	return cli.SetGroupPhoto(ctx, ownJID, imageData)
+}

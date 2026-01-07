@@ -43,6 +43,8 @@ type WAClient interface {
 
 	RequestHistorySyncOnDemand(ctx context.Context, lastKnown types.MessageInfo, count int) (types.MessageID, error)
 	Logout(ctx context.Context) error
+	GetOwnJID() (types.JID, error)
+	SetProfilePicture(ctx context.Context, imageData []byte) (string, error)
 }
 
 type Options struct {
